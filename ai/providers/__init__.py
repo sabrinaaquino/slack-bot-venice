@@ -34,7 +34,7 @@ def get_available_providers():
 def _get_provider(provider_name: str):
     if provider_name.lower() == "anthropic":
         return AnthropicAPI()
-    elif provider_name.lower() == "openai":
+    elif provider_name.lower() == "openai" or provider_name.lower() == "venice":
         return OpenAI_API()
     elif provider_name.lower() == "vertexai":
         return VertexAPI()
@@ -48,13 +48,11 @@ def get_provider_response(
     context: Optional[List] = [],
     system_content=DEFAULT_SYSTEM_CONTENT,
 ):
-    formatted_context = "\n".join([f"{msg['user']}: {msg['text']}" for msg in context])
-    full_prompt = f"Prompt: {prompt}\nContext: {formatted_context}"
     try:
         provider_name, model_name = get_user_state(user_id, False)
         provider = _get_provider(provider_name)
         provider.set_model(model_name)
-        response = provider.generate_response(full_prompt, system_content)
+        response = provider.generate_response(prompt, system_content, messages=context)
         return response
     except Exception as e:
         raise e

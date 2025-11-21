@@ -3,7 +3,7 @@ from ai.providers import get_provider_response
 from logging import Logger
 from slack_bolt import Say
 from slack_sdk import WebClient
-from ..listener_utils.listener_constants import DEFAULT_LOADING_TEXT
+from ..listener_utils.listener_constants import DEFAULT_LOADING_TEXT, CONVERSATION_HISTORY_LIMIT
 from ..listener_utils.parse_conversation import parse_conversation
 
 """
@@ -20,11 +20,18 @@ def app_messaged_callback(client: WebClient, event: dict, logger: Logger, say: S
 
     try:
         if event.get("channel_type") == "im":
-            conversation_context = ""
+            conversation_context = []
 
-            if thread_ts:  # Retrieves context to continue the conversation in a thread.
+            if thread_ts:
+                # Retrieves context to continue the conversation in a thread
                 conversation = client.conversations_replies(
-                    channel=channel_id, limit=10, ts=thread_ts
+                    channel=channel_id, limit=CONVERSATION_HISTORY_LIMIT, ts=thread_ts
+                )["messages"]
+                conversation_context = parse_conversation(conversation[:-1])
+            else:
+                # For regular DMs (not in thread), get conversation history from the channel
+                conversation = client.conversations_history(
+                    channel=channel_id, limit=CONVERSATION_HISTORY_LIMIT
                 )["messages"]
                 conversation_context = parse_conversation(conversation[:-1])
 

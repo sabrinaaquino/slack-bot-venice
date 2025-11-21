@@ -5,6 +5,7 @@ from slack_bolt import Say
 from ..listener_utils.listener_constants import (
     DEFAULT_LOADING_TEXT,
     MENTION_WITHOUT_TEXT,
+    CONVERSATION_HISTORY_LIMIT,
 )
 from ..listener_utils.parse_conversation import parse_conversation
 
@@ -23,10 +24,10 @@ def app_mentioned_callback(client: WebClient, event: dict, logger: Logger, say: 
 
         if thread_ts:
             conversation = client.conversations_replies(
-                channel=channel_id, ts=thread_ts, limit=10
+                channel=channel_id, ts=thread_ts, limit=CONVERSATION_HISTORY_LIMIT
             )["messages"]
         else:
-            conversation = client.conversations_history(channel=channel_id, limit=10)[
+            conversation = client.conversations_history(channel=channel_id, limit=CONVERSATION_HISTORY_LIMIT)[
                 "messages"
             ]
             thread_ts = event["ts"]

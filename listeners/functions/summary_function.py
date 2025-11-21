@@ -2,7 +2,7 @@ from ai.providers import get_provider_response
 from logging import Logger
 from slack_bolt import Complete, Fail, Ack
 from slack_sdk import WebClient
-from ..listener_utils.listener_constants import SUMMARIZE_CHANNEL_WORKFLOW
+from ..listener_utils.listener_constants import SUMMARIZE_CHANNEL_WORKFLOW, CONVERSATION_HISTORY_LIMIT
 from ..listener_utils.parse_conversation import parse_conversation
 
 """
@@ -24,7 +24,7 @@ def handle_summary_function_callback(
     try:
         user_context = inputs["user_context"]
         channel_id = inputs["channel_id"]
-        history = client.conversations_history(channel=channel_id, limit=10)["messages"]
+        history = client.conversations_history(channel=channel_id, limit=CONVERSATION_HISTORY_LIMIT)["messages"]
         conversation = parse_conversation(history)
 
         summary = get_provider_response(

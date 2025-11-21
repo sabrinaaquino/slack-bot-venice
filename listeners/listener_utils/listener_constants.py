@@ -12,3 +12,6 @@ Please create a quick summary of the conversation in this channel to help them c
 Don't use user IDs or names in your response.
 """
 DEFAULT_LOADING_TEXT = "Thinking..."
+
+# Conversation history limit - increase for better memory
+CONVERSATION_HISTORY_LIMIT = 50

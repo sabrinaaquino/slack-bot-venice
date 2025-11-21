@@ -88,7 +88,7 @@ class VertexAPI(BaseAPIProvider):
         else:
             return {}
 
-    def generate_response(self, prompt: str, system_content: str) -> str:
+    def generate_response(self, prompt: str, system_content: str, messages=None) -> str:
         system_instruction = None
         if self.MODELS[self.current_model]["system_instruction_supported"]:
             system_instruction = system_content
@@ -103,8 +103,19 @@ class VertexAPI(BaseAPIProvider):
                 },
                 system_instruction=system_instruction,
             )
+            
+            # Build conversation contents
+            contents = []
+            if messages:
+                for msg in messages:
+                    role = "model" if msg.get("bot_id") else "user"
+                    contents.append({"role": role, "parts": [{"text": msg["text"]}]})
+            
+            # Add current prompt
+            contents.append({"role": "user", "parts": [{"text": prompt}]})
+            
             response = self.client.generate_content(
-                contents=prompt,
+                contents=contents,
             )
             return "".join(part.text for part in response.candidates[0].content.parts)
 

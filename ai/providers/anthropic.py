@@ -45,15 +45,26 @@ class AnthropicAPI(BaseAPIProvider):
         else:
             return {}
 
-    def generate_response(self, prompt: str, system_content: str) -> str:
+    def generate_response(self, prompt: str, system_content: str, messages=None) -> str:
         try:
             self.client = anthropic.Anthropic(api_key=self.api_key)
+            
+            # Build messages array
+            chat_messages = []
+            
+            # Add conversation history if provided
+            if messages:
+                for msg in messages:
+                    role = "assistant" if msg.get("bot_id") else "user"
+                    chat_messages.append({"role": role, "content": [{"type": "text", "text": msg["text"]}]})
+            
+            # Add current prompt
+            chat_messages.append({"role": "user", "content": [{"type": "text", "text": prompt}]})
+            
             response = self.client.messages.create(
                 model=self.current_model,
                 system=system_content,
-                messages=[
-                    {"role": "user", "content": [{"type": "text", "text": prompt}]}
-                ],
+                messages=chat_messages,
                 max_tokens=self.MODELS[self.current_model]["max_tokens"],
             )
             return response.content[0].text
