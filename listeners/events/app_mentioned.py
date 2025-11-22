@@ -51,5 +51,5 @@ def app_mentioned_callback(client: WebClient, event: dict, logger: Logger, say: 
         client.chat_update(
             channel=channel_id,
             ts=waiting_message["ts"],
-            text=f"Received an error from Bolty:\n{e}",
+            text=f"Received an error from Venice Bot:\n{e}",
         )

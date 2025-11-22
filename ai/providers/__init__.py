@@ -49,7 +49,13 @@ def get_provider_response(
     system_content=DEFAULT_SYSTEM_CONTENT,
 ):
     try:
-        provider_name, model_name = get_user_state(user_id, False)
+        try:
+            provider_name, model_name = get_user_state(user_id, False)
+        except FileNotFoundError:
+            # Use default Venice model if user hasn't selected one
+            provider_name = "venice"
+            model_name = "zai-org-glm-4.6"
+        
         provider = _get_provider(provider_name)
         provider.set_model(model_name)
         response = provider.generate_response(prompt, system_content, messages=context)

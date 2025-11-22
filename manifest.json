@@ -4,7 +4,7 @@
         "minor_version": 1
     },
     "display_information": {
-        "name": "Bolty"
+        "name": "Venice Bot"
     },
     "features": {
         "app_home": {
@@ -13,13 +13,13 @@
             "messages_tab_read_only_enabled": false
         },
         "bot_user": {
-            "display_name": "Bolty",
+            "display_name": "Venice Bot",
             "always_online": true
         },
         "slash_commands": [
             {
-                "command": "/ask-bolty",
-                "description": "Interact with Bolty.",
+                "command": "/ask-venice",
+                "description": "Ask Venice Bot a question",
                 "should_escape": false
             }
         ]
@@ -47,8 +47,8 @@
     },
     "functions": {
         "summary_function": {
-            "title": "Bolty Custom Function",
-            "description": "Interact with an AI Chatbot. Bolty must be a channel member.",
+            "title": "Venice Bot Summary",
+            "description": "Summarize channel conversation. Venice Bot must be a channel member.",
             "input_parameters": {
                 "user_context": {
                     "type": "slack#/types/user_context",

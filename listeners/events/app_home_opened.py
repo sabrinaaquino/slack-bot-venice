@@ -60,7 +60,7 @@ def app_home_opened_callback(event: dict, logger: Logger, client: WebClient):
                         "type": "header",
                         "text": {
                             "type": "plain_text",
-                            "text": "Welcome to Bolty's Home Page!",
+                            "text": "Welcome to Venice Bot's Home!",
                             "emoji": True,
                         },
                     },

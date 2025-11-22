@@ -66,7 +66,7 @@ python app.py
 
 * **Direct Message**: Just send a message to the bot
 * **In Channels**: Mention `@Venice Bot` to get a response
-* **Quick Questions**: Use `/ask-bolty your question here`
+* **Quick Questions**: Use `/ask-venice your question here`
 * **Change Models**: Visit the bot's home tab to select a different model
 
 ## Configuration
