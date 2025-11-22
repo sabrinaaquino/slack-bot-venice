@@ -44,3 +44,7 @@ def app_messaged_callback(client: WebClient, event: dict, logger: Logger, say: S
             )
     except Exception as e:
         logger.error(f"Error in app_messaged: {e}")
+        try:
+            client.chat_delete(channel=channel_id, ts=waiting_message["ts"])
+        except:
+            pass
