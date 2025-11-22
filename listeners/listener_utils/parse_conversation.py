@@ -16,8 +16,11 @@ def parse_conversation(conversation: SlackResponse) -> Optional[List[dict]]:
     parsed = []
     try:
         for message in conversation:
-            # Skip messages without text content (file uploads, reactions, etc.)
-            if not message.get("text"):
+            # Get text content
+            text = message.get("text")
+            
+            # Skip messages without text or with empty text
+            if not text or not isinstance(text, str) or not text.strip():
                 continue
             
             # Get user or bot_id
@@ -28,7 +31,6 @@ def parse_conversation(conversation: SlackResponse) -> Optional[List[dict]]:
             if not user and not bot_id:
                 continue
             
-            text = message["text"]
             msg_dict = {"text": text}
             
             if user:
