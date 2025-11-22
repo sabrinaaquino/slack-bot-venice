@@ -50,7 +50,4 @@ def ask_callback(
                 ],
             )
     except Exception as e:
-        logger.error(e)
-        client.chat_postEphemeral(
-            channel=channel_id, user=user_id, text=f"Received an error from Venice Bot:\n{e}"
-        )
+        logger.error(f"Error in ask_command: {e}")
