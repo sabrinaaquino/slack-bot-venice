@@ -55,8 +55,12 @@ class AnthropicAPI(BaseAPIProvider):
             # Add conversation history if provided
             if messages:
                 for msg in messages:
+                    # Skip messages with empty or None text
+                    text = msg.get("text")
+                    if not text or not text.strip():
+                        continue
                     role = "assistant" if msg.get("bot_id") else "user"
-                    chat_messages.append({"role": role, "content": [{"type": "text", "text": msg["text"]}]})
+                    chat_messages.append({"role": role, "content": [{"type": "text", "text": text}]})
             
             # Add current prompt
             chat_messages.append({"role": "user", "content": [{"type": "text", "text": prompt}]})

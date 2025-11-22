@@ -16,9 +16,27 @@ def parse_conversation(conversation: SlackResponse) -> Optional[List[dict]]:
     parsed = []
     try:
         for message in conversation:
-            user = message["user"]
+            # Skip messages without text content (file uploads, reactions, etc.)
+            if not message.get("text"):
+                continue
+            
+            # Get user or bot_id
+            user = message.get("user")
+            bot_id = message.get("bot_id")
+            
+            # Skip if neither user nor bot_id exists
+            if not user and not bot_id:
+                continue
+            
             text = message["text"]
-            parsed.append({"user": user, "text": text})
+            msg_dict = {"text": text}
+            
+            if user:
+                msg_dict["user"] = user
+            if bot_id:
+                msg_dict["bot_id"] = bot_id
+                
+            parsed.append(msg_dict)
         return parsed
     except Exception as e:
         logger.error(e)

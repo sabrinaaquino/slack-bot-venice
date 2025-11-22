@@ -108,8 +108,12 @@ class VertexAPI(BaseAPIProvider):
             contents = []
             if messages:
                 for msg in messages:
+                    # Skip messages with empty or None text
+                    text = msg.get("text")
+                    if not text or not text.strip():
+                        continue
                     role = "model" if msg.get("bot_id") else "user"
-                    contents.append({"role": role, "parts": [{"text": msg["text"]}]})
+                    contents.append({"role": role, "parts": [{"text": text}]})
             
             # Add current prompt
             contents.append({"role": "user", "parts": [{"text": prompt}]})
