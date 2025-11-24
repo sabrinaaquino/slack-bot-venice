@@ -26,13 +26,11 @@ def app_mentioned_callback(client: WebClient, event: dict, logger: Logger, say: 
             conversation = client.conversations_replies(
                 channel=channel_id, ts=thread_ts, limit=CONVERSATION_HISTORY_LIMIT
             )["messages"]
+            conversation_context = parse_conversation(conversation[:-1])
         else:
-            conversation = client.conversations_history(channel=channel_id, limit=CONVERSATION_HISTORY_LIMIT)[
-                "messages"
-            ]
+            # First mention in channel - no thread context needed
             thread_ts = event["ts"]
-
-        conversation_context = parse_conversation(conversation[:-1])
+            conversation_context = []
 
         if text:
             waiting_message = say(text=DEFAULT_LOADING_TEXT, thread_ts=thread_ts)

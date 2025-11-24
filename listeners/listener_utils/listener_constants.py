@@ -13,5 +13,5 @@ Don't use user IDs or names in your response.
 """
 DEFAULT_LOADING_TEXT = "Thinking..."
 
-# Conversation history limit - increase for better memory
-CONVERSATION_HISTORY_LIMIT = 50
+# Conversation history limit for threads
+CONVERSATION_HISTORY_LIMIT = 30

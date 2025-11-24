@@ -23,17 +23,17 @@ def app_messaged_callback(client: WebClient, event: dict, logger: Logger, say: S
             conversation_context = []
 
             if thread_ts:
-                # Retrieves context to continue the conversation in a thread
                 conversation = client.conversations_replies(
                     channel=channel_id, limit=CONVERSATION_HISTORY_LIMIT, ts=thread_ts
                 )["messages"]
                 conversation_context = parse_conversation(conversation[:-1])
             else:
-                # For regular DMs (not in thread), get conversation history from the channel
+                # For first message in DM, get recent history
                 conversation = client.conversations_history(
                     channel=channel_id, limit=CONVERSATION_HISTORY_LIMIT
                 )["messages"]
-                conversation_context = parse_conversation(conversation[:-1])
+                # Reverse to get chronological order, exclude current message
+                conversation_context = parse_conversation(list(reversed(conversation))[:-1])
 
             waiting_message = say(text=DEFAULT_LOADING_TEXT, thread_ts=thread_ts)
             response = get_provider_response(
